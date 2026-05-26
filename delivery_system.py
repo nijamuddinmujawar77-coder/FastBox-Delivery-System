@@ -32,7 +32,7 @@ class DeliverySystemSimulator:
                 data = json.load(f)
             
             # Handle warehouses - both dict and list formats
-            
+
             if isinstance(data.get('warehouses'), dict):
                 self.warehouses = data['warehouses']
             elif isinstance(data.get('warehouses'), list):
@@ -169,6 +169,40 @@ class DeliverySystemSimulator:
             json.dump(report, f, indent=2)
         print(f"[OK] Report saved: {output_file}")
     
+    def visualize_routes(self):
+        # ASCII Route Visualization - Bonus Feature
+        # Shows delivery paths in a simple text format
+        print("\n[ROUTE VISUALIZATION]")
+        print("-" * 50)
+        
+        for agent_id in sorted(self.agent_stats.keys()):
+            packages = self.agent_stats[agent_id]['packages']
+            if not packages:
+                continue
+            
+            print(f"\n{agent_id}: ", end="")
+            agent_location = self.agents[agent_id]
+            
+            for idx, pkg in enumerate(packages):
+                warehouse_id = pkg['warehouse']
+                warehouse_location = self.warehouses[warehouse_id]
+                distance = round(pkg['distance'], 2)
+                
+                print(f"({agent_location[0]:.0f},{agent_location[1]:.0f})->", end="")
+                print(f"[{warehouse_id}]({warehouse_location[0]:.0f},{warehouse_location[1]:.0f})->", end="")
+                
+                for pkg_obj in self.packages:
+                    if pkg_obj['id'] == pkg['package_id']:
+                        dest = pkg_obj['destination']
+                        print(f"(D)({dest[0]:.0f},{dest[1]:.0f})", end="")
+                        if idx < len(packages) - 1:
+                            print(" | ", end="")
+                        break
+            
+            print(f"  [{distance} units]")
+        
+        print("-" * 50)
+
     def run_simulation(self, output_file: str = None) -> Dict[str, Any]:
         # Run complete simulation pipeline.
         if not self.load_data():
@@ -178,6 +212,7 @@ class DeliverySystemSimulator:
         
         self.assign_packages_to_agents()
         self.simulate_delivery()
+        self.visualize_routes()
         report = self.generate_report()
         
         if output_file:

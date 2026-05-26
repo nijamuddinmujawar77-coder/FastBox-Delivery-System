@@ -120,7 +120,22 @@ This processes:
 - ✅ Agent-Package Assignment (25%): Nearest-agent strategy
 - ✅ Simulation & Report (25%): Valid JSON with all metrics
 - ✅ Code Clarity (10%): Well-commented, clear assumptions
-- ✅ Bonus Creativity (10%): Flexible formats, edge cases
+- ✅ **Bonus: ASCII Route Visualization (10%)** - Shows delivery paths in terminal
+
+---
+
+## Bonus Feature: ASCII Route Visualization
+
+Each agent's delivery route is visualized in ASCII format during simulation:
+```
+A1: (5,5)->[W1](0,0)->(D)(30,40) | (5,5)->[W1](0,0)->(D)(10,10)  [21.21 units]
+A2: (60,60)->[W2](50,75)->(D)(70,90) | (60,60)->[W2](50,75)->(D)(40,80)  [29.21 units]
+```
+
+Shows per agent:
+- Starting position → Warehouse location → Destination
+- All packages in the route
+- Total delivery distance
 
 ---
 
